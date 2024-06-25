@@ -1,9 +1,13 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="/README/mymdb.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><img src="/README/mymdb.svg" width="400" alt="MyMDb Logo"></p>
 
 
 ## About the project:
 
 ## Installed Packages:
+
+### First Draft Database Structure (2024-06-25) 
+
+<p align="center"><img src="/README/db-structure.png" width="1558" alt="Database Structure"></p>
 
 ### Back-End:
 
