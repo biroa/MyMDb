@@ -3,11 +3,12 @@
 
 ## About the project:
 
-## Installed Packages:
-
-### First Draft Database Structure (2024-06-25) 
+## Database Structure
+#### First Draft (2024-06-25)
 
 <p align="center"><img src="/README/db-structure.png" width="1558" alt="Database Structure"></p>
+
+## Installed Packages:
 
 ### Back-End:
 
