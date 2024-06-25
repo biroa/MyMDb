@@ -30,6 +30,11 @@ return [
 
     'disks' => [
 
+        'example_api_responses' => [
+            'driver' => 'local',
+            'root' => base_path().'/database/api_responses/',
+            'throw' => false,
+        ],
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
