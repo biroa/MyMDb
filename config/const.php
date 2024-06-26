@@ -1,9 +1,6 @@
 <?php
 
-const USER = 'user';
-const ADMIN = 'admin';
-
 return [
-    'user' => USER,
-    'admin' => ADMIN,
+    'user' => env('USER_ROLE', 'user'),
+    'admin' => env('SUPER_USER_ROLE', 'admin'),
 ];

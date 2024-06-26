@@ -8,6 +8,8 @@ use App\Models\Movie;
 use App\Models\Provider;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class ExampleDataGenerator extends Command
@@ -17,7 +19,7 @@ class ExampleDataGenerator extends Command
      *
      * @var string
      */
-    protected $signature = 'app:generate-example-data';
+    protected $signature = 'app:generate-example-data {withSuperUser}';
 
     /**
      * The console command description.
@@ -27,11 +29,33 @@ class ExampleDataGenerator extends Command
     protected $description = 'Command description';
 
     /**
+     * @return int
+     */
+    public function withSuperUser(): int
+    {
+
+        User::factory()->create([
+            'name' => config('app.user.super.name'),
+            'email' => config('app.user.super.email'),
+            'role' => config('app.user.super.role'),
+            'email_verified_at' => now(),
+            'password' => Hash::make(config('app.user.super.password')),
+            'remember_token' => Str::random(10),
+        ]);
+
+        return CommandAlias::SUCCESS;
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $userRelations = User::factory()->admin()
+        $withSuperUser = (int) $this->argument('withSuperUser');
+        if ($withSuperUser === 1) {
+            $this->withSuperUser();
+        }
+        $userRelations = User::factory()
             ->has(Movie::factory()
                 ->count(3))
             ->has(Provider::factory()
