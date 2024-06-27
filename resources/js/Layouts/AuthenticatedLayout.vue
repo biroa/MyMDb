@@ -10,6 +10,7 @@ import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 const page = usePage()
+const open = ref(false)
 </script>
 
 <template>
@@ -45,13 +46,17 @@ const page = usePage()
                                     Providers
                                 </NavLink>
 
-                                <NavLink >
+                                <NavLink
+                                    :href="route('movie.index')"
+                                    :active="route().current('movie.index')">
                                     List Movies
                                 </NavLink>
 
-                                <NavLink>
-                                    Import a Movie
-                                </NavLink>
+<!--                                <NavLink-->
+<!--                                    :href="route('movie.index')"-->
+<!--                                    :active="route().current('movie.index')">-->
+<!--                                    Import a Movie-->
+<!--                                </NavLink>-->
 
                             </div>
                         </div>
@@ -137,16 +142,16 @@ const page = usePage()
                             Dashboard
                         </ResponsiveNavLink>
 
-                        <ResponsiveNavLink>
-                            Providers
-                        </ResponsiveNavLink>
+<!--                        <ResponsiveNavLink>-->
+<!--                            Providers-->
+<!--                        </ResponsiveNavLink>-->
 
-                        <ResponsiveNavLink >
-                            List Movies
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink>
-                            Import a Movie
-                        </ResponsiveNavLink>
+<!--                        <ResponsiveNavLink >-->
+<!--                            List Movies-->
+<!--                        </ResponsiveNavLink>-->
+<!--                        <ResponsiveNavLink>-->
+<!--                            Import a Movie-->
+<!--                        </ResponsiveNavLink>-->
                     </div>
 
                     <!-- Responsive Settings Options -->

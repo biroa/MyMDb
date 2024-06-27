@@ -30,7 +30,8 @@ class MovieFactory extends Factory
         return [
             'user_id' => User::factory(),
             'title' => $this->faker->sentence(4),
-            'original_title' => $this->faker->regexify('[A-Za-z0-9]{150}'),
+            //'original_title' => $this->faker->regexify('[A-Za-z0-9]{150}'),
+            'original_title' => $this->faker->sentence(6),
             'original:language' => $this->faker->randomLetter(),
             'overview' => $this->faker->text(),
             'popularity' => $this->faker->randomFloat(3, 0, 99999999999999999.999),

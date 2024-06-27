@@ -2,19 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Provider;
+use App\Http\Interfaces\MovieRepositoryInterface;
+use App\Models\Movie;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response;
 
-class ProviderController extends Controller
+class MovieController extends Controller
 {
+
+    protected MovieRepositoryInterface $movieRepository;
+
+    public function __construct(MovieRepositoryInterface $movieRepository)
+    {
+        $this->movieRepository = $movieRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index()
     {
-        return Inertia::render('Provider/Index');
+        $data = $this->movieRepository->getMoviesWithPagination();
+        return Inertia::render('Movies/Index', ['movies' => $data]);
     }
 
     /**
@@ -36,7 +45,7 @@ class ProviderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Provider $provider):void
+    public function show(Movie $movie):void
     {
         //
     }
@@ -44,7 +53,7 @@ class ProviderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Provider $provider):void
+    public function edit(Movie $movie):void
     {
         //
     }
@@ -52,7 +61,7 @@ class ProviderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Provider $provider):void
+    public function update(Request $request, Movie $movie):void
     {
         //
     }
@@ -60,7 +69,7 @@ class ProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Provider $provider):void
+    public function destroy(Movie $movie):void
     {
         //
     }
