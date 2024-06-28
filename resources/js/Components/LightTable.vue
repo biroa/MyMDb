@@ -28,6 +28,14 @@ const headers: Header[] = [
 const items = ref<Item[]>([]);
 const loading = ref(false);
 const serverItemsLength = ref(0);
+/**
+ * Represents the server options for a paginated data object.
+ * @typedef {Object} ServerOptions
+ * @property {number} page - The current page number.
+ * @property {number} rowsPerPage - The number of rows per page.
+ * @property {string} sortBy - The sorting column.
+ * @property {string} sortType - The sort type (asc or desc).
+ */
 const serverOptions = ref<ServerOptions>({
     page: props.paginatedDataObj.current_page,
     rowsPerPage: props.paginatedDataObj.per_page,
@@ -35,6 +43,10 @@ const serverOptions = ref<ServerOptions>({
     sortType: 'desc',
 });
 
+/**
+ * Loads data from the server and sets the corresponding values.
+ * @async
+ */
 const loadFromServer = async () => {
     loading.value = true;
     items.value = props.paginatedDataObj.data;
@@ -42,16 +54,34 @@ const loadFromServer = async () => {
     loading.value = false;
 };
 
+/**
+ * Represents the last item of the last page in a paginated data object.
+ * @type {computed}
+ * @returns {object} - The last page item with a query object containing the last page number.
+ */
 const lastPageItem = computed(() => {
     return {_query:{page:props.paginatedDataObj.last_page}};
 });
+
+/**
+ * Description: Computed property to return the first page item object with a query parameter of page set to 1.
+ *
+ * @returns {Object} The first page item object with a query parameter of page set to 1.
+ */
 const firstPageItem = computed(()=>{
     return {_query:{page:1}}
 });
 
+/**
+ * Calculate the next page item object based on the paginated data.
+ *
+ * @function nextPageItem
+ * @returns {Object} - The next page item object with "_query" property.
+ *
+ */
 const nextPageItem = computed(()=>{
     let next;
-    if(props.paginatedDataObj.current_page < props.paginatedDataObj.last_page){
+    if(props?.paginatedDataObj?.current_page < props?.paginatedDataObj?.last_page){
         next = props.paginatedDataObj.current_page + 1;
     }else{
         next = props.paginatedDataObj.current_page;
@@ -59,9 +89,22 @@ const nextPageItem = computed(()=>{
     return {_query:{page:next}};
 })
 
+/**
+ * Represents the previous page item.
+ *
+ * @typedef {Object} PrevPageItem
+ * @property {Object} _query - The query parameters for retrieving the previous page.
+ * @property {number} _query.page - The page number of the previous page.
+ *
+ * @function prevPageItem
+ * @param {Object} props - The props object containing paginated data.
+ * @param {Object} props.paginatedDataObj - The paginated data object.
+ * @param {number} props.paginatedDataObj.current_page - The current page number.
+ * @returns {PrevPageItem} - The previous page item with query parameters for the previous page.
+ */
 const prevPageItem = computed(()=>{
     let prev;
-    if(props.paginatedDataObj.current_page > 1)
+    if(props?.paginatedDataObj?.current_page > 1)
     {
         prev = props.paginatedDataObj.current_page - 1;
     }else{
@@ -73,19 +116,11 @@ const prevPageItem = computed(()=>{
 // initial load
 loadFromServer();
 
-watch(serverOptions, (value) => { loadFromServer(); }, { deep: true });
+watch(serverOptions, () => { loadFromServer(); }, { deep: true });
 
 </script>
 
 <template>
-
-<!--    <NavLink-->
-<!--        :href="route('provider.index')"-->
-<!--        :active="route().current('provider.index')"-->
-<!--        v-if="page.props.auth.user.role === 'admin'">-->
-<!--        Providers-->
-<!--    </NavLink>-->
-
     <div>
 
         <div>

@@ -6,21 +6,27 @@
         "build": "vue-tsc && vite build"
     },
     "devDependencies": {
+        "@eslint/js": "^9.5.0",
         "@inertiajs/vue3": "^1.0.0",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-vue": "^5.0.0",
         "autoprefixer": "^10.4.19",
         "axios": "^1.6.4",
+        "eslint": "^9.5.0",
+        "eslint-plugin-vue": "^9.26.0",
         "flowbite": "^2.4.1",
+        "globals": "^15.6.0",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.38",
         "tailwindcss": "^3.4.4",
         "typescript": "^5.0.2",
+        "typescript-eslint": "^7.14.1",
         "vite": "^5.0",
         "vue": "^3.4.0",
         "vue-tsc": "^1.8.27"
     },
     "dependencies": {
         "vue3-easy-data-table": "^1.5.47"
-    }
+    },
+    "overrides": { "eslint": "^9.5.0" }
 }
