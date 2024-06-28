@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import {watch, reactive, ref, computed} from "vue";
-import { Link } from '@inertiajs/vue3';
-import type { Header, Item, ServerOptions } from "vue3-easy-data-table";
+import {watch, ref, computed} from "vue";
+import {Header, Item, ServerOptions, ClickRowArgument} from "vue3-easy-data-table";
 import NavLink from "@/Components/NavLink.vue";
-const props = defineProps<{
-    paginatedDataObj: object;
-}>();
+import type {Props} from "@/Contracts/PaginatedDataObjProps";
+import Modal from "@/Components/Modal.vue";
+import dayjs from 'dayjs'
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import TextInput from "@/Components/TextInput.vue";
+import {useForm} from "@inertiajs/vue3";
+
+const props = defineProps<Props>();
 const isLoading = ref(true)
 watch(props.paginatedDataObj, async (newState, oldState) => {
     if(newState !== oldState){
@@ -28,13 +33,9 @@ const headers: Header[] = [
 const items = ref<Item[]>([]);
 const loading = ref(false);
 const serverItemsLength = ref(0);
+
 /**
  * Represents the server options for a paginated data object.
- * @typedef {Object} ServerOptions
- * @property {number} page - The current page number.
- * @property {number} rowsPerPage - The number of rows per page.
- * @property {string} sortBy - The sorting column.
- * @property {string} sortType - The sort type (asc or desc).
  */
 const serverOptions = ref<ServerOptions>({
     page: props.paginatedDataObj.current_page,
@@ -54,10 +55,10 @@ const loadFromServer = async () => {
     loading.value = false;
 };
 
+const dayConverter = (date:string)=> dayjs(date).format('YYYY-MM-DD');
+
 /**
  * Represents the last item of the last page in a paginated data object.
- * @type {computed}
- * @returns {object} - The last page item with a query object containing the last page number.
  */
 const lastPageItem = computed(() => {
     return {_query:{page:props.paginatedDataObj.last_page}};
@@ -90,17 +91,7 @@ const nextPageItem = computed(()=>{
 })
 
 /**
- * Represents the previous page item.
- *
- * @typedef {Object} PrevPageItem
- * @property {Object} _query - The query parameters for retrieving the previous page.
- * @property {number} _query.page - The page number of the previous page.
- *
- * @function prevPageItem
- * @param {Object} props - The props object containing paginated data.
- * @param {Object} props.paginatedDataObj - The paginated data object.
- * @param {number} props.paginatedDataObj.current_page - The current page number.
- * @returns {PrevPageItem} - The previous page item with query parameters for the previous page.
+ * Represents the previous page item of a paginated data object.
  */
 const prevPageItem = computed(()=>{
     let prev;
@@ -117,6 +108,25 @@ const prevPageItem = computed(()=>{
 loadFromServer();
 
 watch(serverOptions, () => { loadFromServer(); }, { deep: true });
+
+const viewModal = ref(false);
+const viewModel = ref({})
+
+/**
+ * Displays the clicked row information.
+ */
+const showRow = (item: ClickRowArgument) => {
+    viewModal.value = true;
+    viewModel.value = {...item}
+
+};
+
+/**
+ * Closes the modal by setting the value of `viewModal` to false.
+ */
+const closeModal = () => {
+    viewModal.value = false;
+};
 
 </script>
 
@@ -135,6 +145,7 @@ watch(serverOptions, () => { loadFromServer(); }, { deep: true });
                 header-text-direction="left"
                 body-text-direction="left"
                 hide-rows-per-page="true"
+                @click-row="showRow"
             >
                 <template #pagination="{ prevPage, nextPage,isFirstPage, isLastPage}">
                     <NavLink class="px-2" :href="route('movie.index',firstPageItem)">
@@ -162,6 +173,76 @@ watch(serverOptions, () => { loadFromServer(); }, { deep: true });
                 </template>
             </EasyDataTable>
         </div>
+        <Modal :show="viewModal" @close="closeModal">
+            <div class="p-6">
+                <p class="text-md font-medium text-gray-900 dark:text-gray-100">
+                    Movie Title:
+                </p>
+                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                     <i class="pl-2">{{viewModel.title}}</i>
+                </h2>
+
+                <p class="mt-3 text-md font-medium text-gray-900 dark:text-gray-100">
+                    Overview:
+                </p>
+                <p class="mt-1 text-lg text-gray-600 dark:text-gray-400">
+                    <i class="pl-2">{{viewModel.overview}}</i>
+                </p>
+                <div class="mt-6">
+
+
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Budget
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Revenue
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Runtime
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Release Date
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Vote Average
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Vote Count
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{viewModel.budget}}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{viewModel.revenue}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{viewModel.runtime}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{dayConverter(viewModel.release_date)}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{viewModel.vote_average}}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{viewModel.vote_count}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </Modal>
     </div>
 </template>
 
