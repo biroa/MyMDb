@@ -55,7 +55,12 @@ const loadFromServer = async () => {
     loading.value = false;
 };
 
-const dayConverter = (date:string)=> dayjs(date).format('YYYY-MM-DD');
+/**
+ * Convert date to YYYY-MM-DD type
+ * @todo: We need to check the datatypes later ...
+ * @param date
+ */
+const dayConverter = (date: Date | undefined | null | string)=> dayjs(date).format('YYYY-MM-DD');
 
 /**
  * Represents the last item of the last page in a paginated data object.
@@ -293,7 +298,7 @@ watch(serverOptions, () => { loadFromServer(); }, { deep: true });
                                     Release Date
                                 </th>
                                 <td class="px-6 py-4">
-                                    {{viewModel?.release_date}}
+                                    {{dayConverter(viewModel?.release_date)}}
                                 </td>
                             </tr>
 
