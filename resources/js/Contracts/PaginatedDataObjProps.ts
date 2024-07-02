@@ -24,4 +24,6 @@ export type ItemData = {
     vote_average: number|null;
     vote_count: number|null;
     user_id: number|null;
+    runtime:number|null;
+    release_date: Date|null
 }
