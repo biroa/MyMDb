@@ -5,10 +5,7 @@ import NavLink from "@/Components/NavLink.vue";
 import type {Props, ItemData} from "@/Contracts/PaginatedDataObjProps";
 import Modal from "@/Components/Modal.vue";
 import dayjs from 'dayjs'
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import {useForm} from "@inertiajs/vue3";
+
 
 const props = defineProps<Props>();
 const isLoading = ref(true)
@@ -106,11 +103,6 @@ const prevPageItem = computed(()=>{
     return {_query:{page:prev}};
 })
 
-// initial load
-loadFromServer();
-
-watch(serverOptions, () => { loadFromServer(); }, { deep: true });
-
 const viewModal = ref(false);
 const viewModel:Ref<ItemData | null> = ref(null)
 
@@ -137,6 +129,10 @@ const editModal = (row:ItemData)=>{
 const closeModal = () => {
     viewModal.value = false;
 };
+
+// initial load
+loadFromServer();
+watch(serverOptions, () => { loadFromServer(); }, { deep: true });
 
 </script>
 
