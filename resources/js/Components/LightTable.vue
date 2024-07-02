@@ -27,6 +27,7 @@ const headers: Header[] = [
     // { text: "Overview", value: "overview", width: 500},
     { text: "View", value: "view",width:50},
     { text: "Edit", value: "edit",width:50},
+    { text: "Get Details", value: "get-details", width:100},
 ];
 
 const items = ref<Item[]>([]);
@@ -106,6 +107,11 @@ const prevPageItem = computed(()=>{
 const viewModal = ref(false);
 const viewModel:Ref<ItemData | null> = ref(null)
 
+
+const getMovieDetails = (row:ItemData) =>{
+    console.log('Get Movie Detail By ID:' + row.id)
+}
+
 /**
  * Displays the clicked row information.
  */
@@ -181,6 +187,19 @@ watch(serverOptions, () => { loadFromServer(); }, { deep: true });
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
+                        </button>
+                    </div>
+                </template>
+                <template #item-get-details="item">
+                    <div class="font-normal justify-start">
+                        <button
+                            @click.prevent="getMovieDetails(item)"
+                            type="button"
+                            class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                            </svg>
+
                         </button>
                     </div>
                 </template>

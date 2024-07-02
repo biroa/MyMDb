@@ -3,9 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import LightTable from "@/Components/LightTable.vue";
 import {Head, useForm} from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3'
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
 const page = usePage();
 
 const form = useForm({
